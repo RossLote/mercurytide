@@ -26,7 +26,7 @@ def get_links(soup, url):
         )
     return links
 
-def get_missing_keywords(soup):
+def get_missing_keywords(soup, word_list):
     keywords_meta = soup.findAll(attrs={"name":"keywords"})
     if keywords_meta:
         keywords = keywords_meta[0]['content'].encode('utf-8').split(', ')

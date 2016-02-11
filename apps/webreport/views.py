@@ -42,7 +42,7 @@ def get_report(url):
 
     meta_tags = re.findall(r'(<meta.*>)', html)
 
-    missing_words = get_missing_keywords(soup)
+    missing_words = get_missing_keywords(soup, word_list)
 
     links = get_links(soup, url)
 
