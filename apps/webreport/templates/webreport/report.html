@@ -1,0 +1,138 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Mercurytide Webreport</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="{% static "webreport/css/bootstrap.min.css" %}">
+        <style>
+            body {
+                padding-top: 50px;
+                padding-bottom: 20px;
+            }
+        </style>
+    </head>
+    <body>
+    <div class="container">
+        <p class="lead"> Enter URL to get analysis of the web page</p>
+        <div class="row">
+            <div class="well col-md-6 col-md-offset-3">
+            <form class="" action="." method="post" novalidate="">
+                <div class="form-group">
+                    <label for="{{ form.url.id_for_label }}">{{ form.url.label }}</label>
+                    {{ form.url }}
+                </div>
+
+                {% csrf_token %}
+                <button type="submit" class="btn btn-submit">Get Report</button>
+            </form>
+            </div>
+        </div>
+        {% if report %}
+        <hr>
+        <h1>Analysis of webpage - <a target="_blank" href="{{ report.page_url }}">{{ report.page_url }}</a></h1>
+        <h2>Summary</h2>
+        <table class="table" width="100%">
+            <tbody>
+                <tr>
+                    <td width="30%">
+                        Page Title
+                    </td>
+                    <td>
+                        {{ report.title }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Meta Tags
+                    </td>
+                    <td>
+                        {% for tag in report.tags %}
+                            {{ tag }}<br>
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Page File Size
+                    </td>
+                    <td>
+                        {{ report.pagesize }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <h2>Page Analysis</h2>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td width="30%">
+                        Word Count
+                    </td>
+                    <td>
+                        {{ report.word_count }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Number of unique words
+                    </td>
+                    <td>
+                        {{ report.unique_words }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Top 5 most used words
+                    </td>
+                    <td>
+                        <ol>
+                            {% for word, count in report.top_five %}
+                                <li>{{ word }} ({{ count }})</li>
+                            {% endfor %}
+                        </ol>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Meta keywords missing from content
+                    </td>
+                    <td>
+                        {{ report.missing_words }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <h2>Page Links</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th width="30%">
+                        Text
+                    </th>
+                    <th>
+                        Link
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for link, text in report.links %}
+                <tr>
+                    <td>
+                        {{ text }}
+                    </td>
+                    <td>
+                        {{ link }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div> <!-- /container -->
+    </body>
+</html>
